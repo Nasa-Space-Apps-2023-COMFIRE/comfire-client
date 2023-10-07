@@ -4,7 +4,7 @@ import {Dialog} from "@headlessui/react";
 import {Bars3Icon} from "@heroicons/react/20/solid";
 import {XMarkIcon} from "@heroicons/react/24/outline";
 import Link from "next/link";
-// import {SignedIn, SignedOut, SignInButton, UserButton} from "@clerk/nextjs";
+import {SignedIn, SignedOut, SignInButton, UserButton} from "@clerk/nextjs";
 import Image from "next/image";
 import logo from "@/static/logo.png";
 import {Button} from "@/components/ui/button";
@@ -49,22 +49,15 @@ export default function Navbar() {
                         ))}
                     </nav>
                     <div className="flex flex-1 items-center justify-end gap-x-8">
-                        {/*<SignedIn>*/}
-                        {/*    <Link*/}
-                        {/*        className="btn md:flex md:gap-x-11 md:text-sm md:font-semibold md:leading-6 md:text-gray-700"*/}
-                        {/*        href="/instructor/dashboard"*/}
-                        {/*    >*/}
-                        {/*        <Button variant={"link"}>Dashboard</Button>*/}
-                        {/*    </Link>*/}
-                        {/*    /!* Mount the UserButton component *!/*/}
-                        {/*    <UserButton afterSignOutUrl="/"/>*/}
-                        {/*</SignedIn>*/}
-                        {/*<SignedOut>*/}
-                        {/*    /!* Signed out users get sign in button *!/*/}
-                        {/*    <SignInButton mode="modal">*/}
-                        {/*        <Button variant={"link"}>Sign in</Button>*/}
-                        {/*    </SignInButton>*/}
-                        {/*</SignedOut>*/}
+                        <SignedIn>
+                            <UserButton afterSignOutUrl="/"/>
+                        </SignedIn>
+                        <SignedOut>
+                            {/* Signed out users get sign in button */}
+                            <SignInButton mode="modal">
+                                <Button variant={"link"}>Sign in</Button>
+                            </SignInButton>
+                        </SignedOut>
                     </div>
                 </div>
                 <Dialog
