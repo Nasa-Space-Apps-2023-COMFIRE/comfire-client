@@ -1,14 +1,14 @@
 "use client";
 // components/Map.jsx
 
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 
 import Map from "react-map-gl";
 import {HexagonLayer} from "@deck.gl/aggregation-layers";
 // import {HeatmapLayer} from '@deck.gl/aggregation-layers';
 import DeckGL from "@deck.gl/react";
 import "mapbox-gl/dist/mapbox-gl.css";
-
+import _ from 'lodash'; // Import lodash for throttling
 // import map config
 import {colorRange, lightingEffect, material,} from "@/lib/map-config";
 
@@ -18,14 +18,34 @@ const LocationAggregatorMap = ({
                                    data,
                                    cityName, lat, lng
                                }) => {
-    const [radius, setRadius] = useState(9999);
+    const [radius, setRadius] = useState(5000);
+
+    const handleViewStateChange = useCallback(_.throttle(({ viewState }) => {
+        const { zoom } = viewState;
+        requestAnimationFrame(() => {  // Use requestAnimationFrame
+            let newRadius;
+            if (zoom >= 8 && zoom <= 13.5) {
+                // Linear increase in radius between zoom levels 8 and 13.5
+                const m = (4000 - 100) / (8 - 13.5);
+                const b = 100 - m * 13.5;
+                newRadius = m * zoom + b;
+            } else if (zoom > 13.5 && zoom <= 15) {
+                // Radius remains at 100 between zoom levels 13.5 and 15
+                newRadius = 100;
+            }
+            setRadius(newRadius);
+        });
+    }, 200), []);  // Throttle updates to every 200ms
+
+
+
 
     const INITIAL_VIEW_STATE = {
         longitude: Number(lng),
         latitude: Number(lat),
-        zoom: 10,
-        minZoom: 1,
-        maxZoom: 10.5,
+        zoom: 8,
+        minZoom: 8,
+        maxZoom: 15,
         pitch: 0,
         bearing: 0
     };
@@ -56,7 +76,7 @@ const LocationAggregatorMap = ({
             colorRange,
             coverage,
             data,
-            elevationRange: [0, 3000],
+            elevationRange: [0, 100],
             elevationScale: data && data.length ? 50 : 0,
             extruded: true,
             getPosition: (d) => d,
@@ -71,15 +91,6 @@ const LocationAggregatorMap = ({
         }),
     ];
 
-    // const layers = [
-    //     new HeatmapLayer({
-    //         id: 'heatmapLayer',
-    //         data,
-    //         getPosition: d => d,
-    //         getWeight: d => 1,  // You can adjust the weight if your data has a weight property
-    //         radiusPixels: 10,  // Adjust the radius to your liking
-    //     }),
-    // ];
 
     return (
         <div className="">
@@ -89,6 +100,7 @@ const LocationAggregatorMap = ({
                 initialViewState={INITIAL_VIEW_STATE}
                 controller={true}
                 getTooltip={getTooltip}
+                onViewStateChange={handleViewStateChange}
             >
                 <Map
                     className=""
