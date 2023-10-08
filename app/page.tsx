@@ -1,11 +1,36 @@
 "use client";
 import {useUser} from "@clerk/nextjs"
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import AlertSection from "@/app/alert-section";
-import LocationInput from "@/components/LocationInput";
+import LocationInput from "@/components/locationInput";
+import {useRouter} from "next/navigation";
 
 export default function Home() {
+    const Router = useRouter();
     const {isSignedIn, user} = useUser();
+    const [isSearchDone, setIsSearchDone] = useState(false);
+    const [filteredCityName, setFilteredCityName] = useState("");
+    const [addressCoor, setAddressCoor] = useState();
+
+    useEffect(() => {
+        if (isSearchDone) {
+            const lat = addressCoor.lat;
+            const lng = addressCoor.lng;
+            const queryParameters = new URLSearchParams({
+                cityName: filteredCityName,
+                lat: lat,
+                lng: lng,
+            }).toString();
+            Router.push(`/map?${queryParameters}`);
+            setIsSearchDone(false);
+        }
+    }, [isSearchDone]);
+    // useEffect(() => {
+    //     if (isSearchDone) {
+    //         Router.push('/map');
+    //         setIsSearchDone(false);
+    //     }
+    // }, [isSearchDone]);
 
     let userInfo = {
         clerk_id: user?.id,
@@ -49,7 +74,9 @@ export default function Home() {
                             the fire and create action plans.
                         </p>
                         <div className="mt-4 md:mt-10 flex items-center justify-center gap-x-6">
-                            <LocationInput/>
+                            <LocationInput setIsSearchDone={setIsSearchDone} setFilteredCityName={setFilteredCityName}
+                                           setAddressCoor={setAddressCoor}/>
+                            {/*<LocationInput setIsSearchDone={setIsSearchDone}/>*/}
                         </div>
                     </div>
                 </div>
