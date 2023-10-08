@@ -2,6 +2,7 @@
 import {useUser} from "@clerk/nextjs"
 import {useEffect} from "react";
 import AlertSection from "@/app/alert-section";
+import LocationInput from "@/components/LocationInput";
 
 export default function Home() {
     const {isSignedIn, user} = useUser();
@@ -48,12 +49,7 @@ export default function Home() {
                             the fire and create action plans.
                         </p>
                         <div className="mt-4 md:mt-10 flex items-center justify-center gap-x-6">
-                            <a
-                                href="#"
-                                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            >
-                                Ahmad Add Command Box Here
-                            </a>
+                            <LocationInput/>
                         </div>
                     </div>
                 </div>
