@@ -5,9 +5,10 @@ import {MagnifyingGlassIcon} from '@heroicons/react/20/solid';
 
 const libraries = ["places"];
 
-export default function LocationInput() {
+export default function LocationInput({setIsSearchDone, setFilteredCityName, setAddressCoor}) {
     const [address, setAddress] = useState("");
     const [cityName, setCityName] = useState("");
+    const [addressCoordinates, setAddressCoordinates] = useState({});
     const [cityBounds, setCityBounds] = useState(null);
     const searchBoxRef = useRef(null);
     const onLoad = ref => searchBoxRef.current = ref;
@@ -25,6 +26,12 @@ export default function LocationInput() {
                 break;
             }
         }
+
+        // Extract coordinates of the typed address
+        const addressCoordinates = {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
+        };
 
         if (cityName && placesServiceRef.current) {
             // Instantiate a new PlacesService
@@ -47,7 +54,12 @@ export default function LocationInput() {
                         };
                         setCityBounds(bounds);
                     }
-                    setCityName(cityName); // Update the state with the city name
+                    setCityName(cityName);
+                    setAddressCoordinates(addressCoordinates);
+                    setFilteredCityName(cityName);
+                    console.log('addressCoordinates', addressCoordinates);
+                    setAddressCoor(addressCoordinates);
+                    setIsSearchDone(true);
                 }
             });
         }
