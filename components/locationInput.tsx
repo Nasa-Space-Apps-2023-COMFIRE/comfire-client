@@ -57,7 +57,6 @@ export default function LocationInput({setIsSearchDone, setFilteredCityName, set
                     setCityName(cityName);
                     setAddressCoordinates(addressCoordinates);
                     setFilteredCityName(cityName);
-                    console.log('addressCoordinates', addressCoordinates);
                     setAddressCoor(addressCoordinates);
                     setIsSearchDone(true);
                 }
@@ -68,7 +67,7 @@ export default function LocationInput({setIsSearchDone, setFilteredCityName, set
     useEffect(() => {
         if (cityBounds) {
             const queryString = `northEastLat=${cityBounds.northEast.lat}$northEastLng=${cityBounds.northEast.lng}$southWestLat=${cityBounds.southWest.lat}$southWestLng=${cityBounds.southWest.lng}`;
-            const endpoint = `http://172.105.98.178:8000/modis/${queryString}`;
+            const endpoint = `http://172.105.98.178:8000/modis_filtered/${queryString}`;
 
             // Make a GET request to the modified endpoint
             fetch(endpoint).then(response => {
@@ -80,7 +79,7 @@ export default function LocationInput({setIsSearchDone, setFilteredCityName, set
                 console.error("Error fetching data:", error);
             });
         }
-    }, [cityBounds]);
+    }, []);
 
 
     return (

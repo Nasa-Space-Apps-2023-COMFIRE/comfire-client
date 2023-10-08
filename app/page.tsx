@@ -25,12 +25,6 @@ export default function Home() {
             setIsSearchDone(false);
         }
     }, [isSearchDone]);
-    // useEffect(() => {
-    //     if (isSearchDone) {
-    //         Router.push('/map');
-    //         setIsSearchDone(false);
-    //     }
-    // }, [isSearchDone]);
 
     let userInfo = {
         clerk_id: user?.id,

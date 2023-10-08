@@ -31,10 +31,10 @@ export const material = {
 };
 
 export const colorRange = [
-    [1, 152, 189],
-    [73, 227, 206],
-    [216, 254, 181],
-    [254, 237, 177],
-    [254, 173, 84],
-    [209, 55, 78],
+    [255, 0, 0],   // Pure red
+    [255, 50, 50], // Slightly lighter red
+    [255, 0, 0],   // Pure red
+    [200, 0, 0],   // Slightly darker red
+    [150, 0, 0],   // Even darker red
+    [100, 0, 0]    // Very dark red
 ];

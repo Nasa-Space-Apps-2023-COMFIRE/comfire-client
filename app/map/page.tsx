@@ -13,7 +13,6 @@ export default function Map() {
     useEffect(() => {
         const getData = async () => {
             const response = await fetch(
-                // "http://172.105.98.178:8000/modis"
                 "http://172.105.98.178:8000/virs"
             );
             const data = await response.json();
